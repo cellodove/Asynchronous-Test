@@ -7,24 +7,26 @@ fun main() = runBlocking{
 }
 
 suspend fun doOneTwoThree() = coroutineScope {
-    val job = launch {
+    val job1 = launch {
         println("launch1: ${Thread.currentThread().name}")
         delay(1000L)
         println("3!")
     }
-    job.join()
 
-    launch {
+    val job2 = launch {
         println("launch2: ${Thread.currentThread().name}")
         println("1!")
     }
 
-    repeat(1000) {
-        launch {
-            println("launch3: ${Thread.currentThread().name}")
-            delay(500L)
-            println("2!")
-        }
+    val job3 = launch {
+        println("launch3: ${Thread.currentThread().name}")
+        delay(500L)
+        println("2!")
     }
+
+    delay(800L)
+    job1.cancel()
+    job2.cancel()
+    job3.cancel()
     println("4!")
 }
